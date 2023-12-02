@@ -12,13 +12,19 @@ export class Server {
         nullable: false,
         default: "",
     })
-    notificationsChannel: string;
+    warNotificationsChannel: string;
 
     @Column({
         nullable: false,
         default: "",
     })
-    alliances: string;
+    yourAlliances: string;
+
+    @Column({
+        nullable: false,
+        default: "",
+    })
+    enemyAlliances: string;
 
     @Column({
         nullable: false,

@@ -37,23 +37,19 @@ export class VerifyCommand extends Command {
         if (messageResults == null || !messageResults.success)
             return interaction.editReply({ embeds: [embedCreator.error(`Failed to send message to nation`)] });
 
-        try {
-            const newUser = new User();
-            newUser.discordId = interaction.user.id;
-            newUser.nationId = Number(nationData.id);
-            newUser.verificationToken = token;
-            newUser.verified = false;
+        const newUser = new User();
+        newUser.discordId = interaction.user.id;
+        newUser.nationId = Number(nationData.id);
+        newUser.verificationToken = token;
+        newUser.verified = false;
 
-            await userDatabase.insert(newUser);
-            users.set(newUser.discordId, newUser);
-
-            return interaction.editReply({ embeds: [embedCreator.default(`Success`, `Started the verification process, chen your in-game messages.`)] })
-        }
-        catch (err) {
-
+        await userDatabase.insert(newUser).catch(err => {
             logger.error(err);
             return interaction.editReply({ embeds: [embedCreator.error(`Failed to add user to the database`)] });
-        }
+        });
+        users.set(newUser.discordId, newUser);
+
+        return interaction.editReply({ embeds: [embedCreator.default(`Success`, `Started the verification process, chen your in-game messages.`)] })
     }
 
     public async stepTwo(interaction: Command.ChatInputCommandInteraction, token: string) {
@@ -75,17 +71,14 @@ export class VerifyCommand extends Command {
         if (user.verificationToken != token)
             return interaction.editReply({ embeds: [embedCreator.error(`Verification tokens do not match`)] });
 
-        try {
-            user.verified = true;
-            await userDatabase.save(user);
-            users.set(user.discordId, user);
-
-            return interaction.editReply({ embeds: [embedCreator.default(`Success`, `Your nation is now verified with your discord`)] });
-        }
-        catch (err) {
+        user.verified = true;
+        await userDatabase.save(user).catch(err => {
             logger.error(err);
             return interaction.editReply({ embeds: [embedCreator.error(`Failed to verify nation`)] });
-        }
+        });
+        users.set(user.discordId, user);
+
+        return interaction.editReply({ embeds: [embedCreator.default(`Success`, `Your nation is now verified with your discord`)] });
     }
 
     public override registerApplicationCommands(registry: Command.Registry) {

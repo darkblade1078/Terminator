@@ -16,32 +16,26 @@ export default class pnwAPI {
 
     async checkNationExistence(nationId: number): Promise<nation | null> {
 
-        try {
-            const data = await kit.nationQuery({ first: 1, id: [nationId] },
-                `
+        const data = await kit.nationQuery({ first: 1, id: [nationId] },
+            `
                 id
                 nation_name
                 leader_name
                 `,
-                false
-            );
-
-            return data.length == 0 ? null : data[0];
-        }
-        catch (err) {
+            false
+        ).catch(err => {
             this.container.logger.error(err);
-        }
+            return null;
+        });
 
-        return null;
+        return !data || data.length == 0 ? null : data[0];
     }
 
     async sendVerificationMessage(nation: nation, token: string, interaction: Command.ChatInputCommandInteraction): Promise<messageResult | null> {
-
-        try {
-            const data = await kit.sendMessage(
-                Number(nation.id),
-                `Verification Message`,
-                `Hello there, ${nation.leader_name}.
+        const data = await kit.sendMessage(
+            Number(nation.id),
+            `Verification Message`,
+            `Hello there, ${nation.leader_name}.
                 
                 If you are reading this message, a discord account: ${interaction.user.username} (${interaction.user.id}) is trying to verify your nation with their discord.
                 If this is you, run the verify command again and paste your token into the token argument to finsh your verification.
@@ -49,35 +43,60 @@ export default class pnwAPI {
     
                 token: ${token}
                 `
-            );
-
-            return data;
-        }
-        catch (err) {
+        ).catch(err => {
             this.container.logger.error(err);
-        }
+            return null;
+        });
 
-        return null;
+        return data;
     }
 
     async checkAllianceExistence(allianceId: number): Promise<alliance | null> {
 
-        try {
-            const data = await kit.allianceQuery({ first: 1, id: [allianceId] },
-                `
+        const data = await kit.allianceQuery({ first: 1, id: [allianceId] },
+            `
                     id
                     name
                 `,
-                false
-            );
-
-            return data.length == 0 ? null : data[0];
-        }
-        catch (err) {
+            false
+        ).catch(err => {
             this.container.logger.error(err);
-        }
+            return null;
+        });
 
-        return null;
+        return !data || data.length == 0 ? null : data[0];
+    }
+
+    async getWhoData(nationId: number): Promise<nation | null> {
+
+        const data = await kit.nationQuery({ first: 1, id: [nationId] },
+            `
+                id
+                nation_name
+                num_cities
+                color
+                domestic_policy
+                score
+                war_policy
+                soldiers
+                tanks
+                aircraft
+                ships
+                missiles
+                nukes
+                flag
+                wars {
+                    turns_left
+                    def_id
+                }
+                `,
+            false
+        ).catch(err => {
+            this.container.logger.error(err);
+            return null;
+        });
+
+        return !data || data.length == 0 ? null : data[0];
     }
 
 }

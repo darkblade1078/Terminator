@@ -13,7 +13,7 @@ export class ReadyListener extends Listener {
     }
 
     public async run(client: Client): Promise<void> {
-        const { logger} = this.container;
+        const { logger } = this.container;
         const { username, id } = client.user!;
         logger.info(`Successfully logged in as ${username} (${id})`);
 
