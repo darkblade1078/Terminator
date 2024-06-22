@@ -44,7 +44,7 @@ export class SettingsCommand extends Subcommand {
         if (!serverData)
             return interaction.editReply({ embeds: [embedCreator.error(`Server does not exist in the database`)] });
 
-        let alliancesArray = arrayUtils.convertStringtoIntArray(serverData.yourAlliances);
+        let alliancesArray = arrayUtils.convertStringtoIntArray(serverData.extensions);
 
         switch (change) {
 
@@ -59,7 +59,7 @@ export class SettingsCommand extends Subcommand {
                     return interaction.editReply({ embeds: [embedCreator.error(`Alliance does not exist`)] });
 
                 alliancesArray.push(alliance);
-                serverData.yourAlliances = arrayUtils.convertIntArraytoString(alliancesArray);
+                serverData.extensions = arrayUtils.convertIntArraytoString(alliancesArray);
 
                 await serverDatabase.save(serverData).catch(err => {
                     logger.error(err);
@@ -82,7 +82,7 @@ export class SettingsCommand extends Subcommand {
 
                 alliancesArray.splice(index, 1);
 
-                serverData.yourAlliances = alliancesArray.length > 0 ? arrayUtils.convertIntArraytoString(alliancesArray) : "";
+                serverData.extensions = alliancesArray.length > 0 ? arrayUtils.convertIntArraytoString(alliancesArray) : "";
 
                 await serverDatabase.save(serverData).catch(err => {
                     logger.error(err);

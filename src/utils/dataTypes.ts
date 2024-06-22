@@ -1,5 +1,6 @@
 export default class dataTypesUtilities {
 
+    //turns a string filled with numbers and commas into a number array
     convertStringtoIntArray(stringArray: string): number[] {
 
         let newArray: number[] = [];
@@ -12,6 +13,7 @@ export default class dataTypesUtilities {
         return newArray;
     }
 
+    //turns an array of numbers into a string so it can be put into an sqlite database
     convertIntArraytoString(intArray: number[]): string {
 
         let newArray = intArray[0].toString();

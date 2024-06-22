@@ -23,6 +23,8 @@ export class ReadyListener extends Listener {
         //initialize servers database
         await utils.initializeServersDatabase();
         await utils.initializeUsersDatabase();
+        await utils.initializeTargetWarsDatabase();
+        await utils.initializeWarRoomsDatabase();
 
         //set bot activity
         client.user?.setActivity(`${client.guilds.cache.size} servers`, {

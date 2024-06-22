@@ -25,10 +25,12 @@ export class ReadyListener extends Listener {
 
         servers.set(guild.id, {
             serverId: guild.id,
+            mainAllianceId: "",
             warNotificationsChannel: "",
-            yourAlliances: "",
+            extensions: "",
             enemyAlliances: "",
-            channel: "",
+            warRoomCategoryId: "",
+            warRooms: [],
         });
 
         //set bot activity

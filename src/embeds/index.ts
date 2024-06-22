@@ -44,7 +44,7 @@ export default class embeds {
             .setColor('Blurple')
             .setTimestamp()
             .addFields(
-                { name: 'Your Alliances', value: `${server.yourAlliances ? server.yourAlliances.split(',').join('\n') : "none"}`, inline: true },
+                { name: 'Your Alliances', value: `${server.extensions ? server.extensions.split(',').join('\n') : "none"}`, inline: true },
                 { name: 'Enemy Alliances', value: `${server.enemyAlliances ? server.enemyAlliances.split(',').join('\n') : "none"}`, inline: true },
                 { name: 'War Notifications Channel', value: `${server.warNotificationsChannel ? server.warNotificationsChannel : 'none'}`, inline: true },
             )
