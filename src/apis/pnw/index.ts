@@ -72,7 +72,11 @@ export default class pnwAPI {
         const data = await kit.nationQuery({ first: 1, id: [nationId] },
             `
                 id
+                alliance_id
                 nation_name
+                leader_name
+                last_active
+                date
                 num_cities
                 color
                 domestic_policy
@@ -85,10 +89,10 @@ export default class pnwAPI {
                 missiles
                 nukes
                 flag
-                wars {
-                    turns_left
-                    def_id
-                }
+                offensive_wars_count
+                defensive_wars_count
+                pirate_economy
+                advanced_pirate_economy
                 `,
             false
         ).catch(err => {

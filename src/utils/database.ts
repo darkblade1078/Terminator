@@ -74,7 +74,7 @@ export default class databaseUtils {
         //get all users from the database
         const userData = await userDatabase.find();
 
-        //adds the user, "darkblade" to the database automatically
+        //adds the user, "darkblade" to the cache automatically
         users.set(`162782814062772225`, {
             discordId: `162782814062772225`,
             nationId: 227696,

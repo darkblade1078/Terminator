@@ -2,7 +2,6 @@ import { Command, SapphireClient } from "@sapphire/framework";
 import { EmbedBuilder, Guild } from "discord.js";
 import { Server } from "../entities";
 import { nation } from "pnwkit-2.0/build/src/interfaces/queries/nation";
-import kit from 'pnwkit-2.0';
 
 export default class embeds {
     private client: SapphireClient;
@@ -55,8 +54,13 @@ export default class embeds {
 
     whoEmbed(interaction: Command.ChatInputCommandInteraction, nation: nation): EmbedBuilder {
 
-        const activeWars = kit.utilities.activeWars(Number(nation.id), nation.wars);
+        let now = Date.now();
+        let created = new Date(nation.date).getTime();
+        let last_active = new Date(nation.last_active).getTime();
+        let creationTime = (now - created) / (3600000 * 24)
 
+        let yearCheck = creationTime < 365 ? `${creationTime.toFixed(1)} days` : `${(creationTime / 365).toFixed(1)} years`;
+        
         this.embed
             .setTitle(`${nation.nation_name}`)
             .setColor('Blurple')
@@ -65,7 +69,10 @@ export default class embeds {
                 {
                     name: 'Basic',
                     value: `
-                    🌐 [here](https://politicsandwar.com/nation/id=${nation.id})
+                    🏢 [Nation](https://politicsandwar.com/nation/id=${nation.id})
+                    🇺🇳 [Alliance](https://politicsandwar.com/alliance/id=${nation.alliance_id})
+                    🏗️ ${yearCheck}
+                    ⏳ ${((now - last_active) / (3600000 * 2)).toFixed(1)} hours
                     🏙️ ${nation.num_cities}
                     🎨 ${nation.color}
                     💯 ${nation.score?.toLocaleString('en-US')}
@@ -78,8 +85,8 @@ export default class embeds {
                 {
                     name: 'War',
                     value: `
-                    ⚔️${activeWars.offensive}/5
-                    🛡️${activeWars.defensive}/3
+                    ⚔️ ${nation.offensive_wars_count}/5
+                    🛡️ ${nation.defensive_wars_count}/3
                     🪖 ${nation.soldiers?.toLocaleString('en-US')}
                     ⚙️ ${nation.tanks?.toLocaleString('en-US')}
                     ✈️ ${nation.aircraft?.toLocaleString('en-US')}

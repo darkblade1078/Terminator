@@ -1,6 +1,7 @@
 import { Command } from '@sapphire/framework';
 import embeds from '../embeds';
 import pnwAPI from '../apis/pnw';
+import buttons from "../buttons";
 
 export class WhoCommand extends Command {
     public constructor(context: Command.LoaderContext, options: Command.Options) {
@@ -11,6 +12,7 @@ export class WhoCommand extends Command {
         await interaction.deferReply();
         const { client, users } = this.container;
         const embedCreator = new embeds(client);
+        const whoButton = new buttons();
         const api = new pnwAPI(this.container);
         const discordUser = interaction.options.getUser(`user`, true);
         const user = users.get(discordUser.id);
@@ -23,7 +25,7 @@ export class WhoCommand extends Command {
         if (data == null)
             return interaction.editReply({ embeds: [embedCreator.error(`Could not find nation`)] });
 
-        return interaction.editReply({ embeds:[embedCreator.whoEmbed(interaction, data)]});
+        return interaction.editReply({ components: [whoButton.whoButtonRow(data)], embeds:[embedCreator.whoEmbed(interaction, data)], });
     }
 
     public override registerApplicationCommands(registry: Command.Registry) {
